@@ -3,7 +3,7 @@ const dialog = document.querySelector('#registration');
 const form = document.querySelector('#demo-form');
 const registrationEndpoint = 'https://n8n.techleadsit.com/webhook/scm-batch-80-registration';
 
-const demoTime = Date.parse('2026-10-31T08:00:00+05:30');
+const demoTime = Date.parse('2026-12-12T08:00:00+05:30');
 function updateCountdown() {
   const remaining = Math.max(0, Math.floor((demoTime - Date.now()) / 1000));
   const parts = {
@@ -105,7 +105,7 @@ document.querySelectorAll('form').forEach(currentForm => {
       if (!response.ok || result.success !== true || result.registrationId !== registrationId) throw new Error('Registration not confirmed');
       registered = true;
       submit.textContent = 'You’re registered ✓';
-      message.textContent = 'Your free seat is reserved! Join the Oracle Fusion SCM live demo on 31 October 2026 at 8:00 AM IST. Zoom meeting ID: 8125 32 32 32.';
+      message.textContent = 'Your free seat is reserved! Join the Oracle Fusion SCM live demo on 12 December 2026 at 8:00 AM IST. Zoom meeting ID: 8125 32 32 32.';
       const zoomLink = document.createElement('a');
       zoomLink.href = 'https://zoom.us/j/8125323232';
       zoomLink.target = '_blank';

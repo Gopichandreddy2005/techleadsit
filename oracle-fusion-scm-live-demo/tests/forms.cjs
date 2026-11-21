@@ -7,7 +7,7 @@ const server=http.createServer((req,res)=>{
   const file=path.join(root,new URL(req.url,'http://localhost').pathname.replace(/^\//,'')||'index.html');
   if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return;}
   try{
-    res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':file.endsWith('.html')?'text/html':'application/octet-stream');
+    res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':file.endsWith('.html')?'text/html':file.endsWith('.svg')?'image/svg+xml':file.endsWith('.png')?'image/png':'application/octet-stream');
     let content=fs.readFileSync(file);
     if(file.endsWith('app.js')&&enabled)content=content.toString().replace("{enabled: false, endpoint: '', sitekey: ''}",JSON.stringify({enabled:true,endpoint,sitekey:'mock-sitekey'}));
     res.end(content);
@@ -21,13 +21,25 @@ const server=http.createServer((req,res)=>{
   await page.route('https://challenges.cloudflare.com/**',r=>r.fulfill({contentType:'application/javascript',body:'window.turnstile={render:(e,o)=>{window.mockCallbacks ||= []; const id=window.mockCallbacks.push(o)-1;setTimeout(o.callback,0);return id},getResponse:()=>"mock-token",reset:id=>setTimeout(window.mockCallbacks[id].callback,0)};window.scmTurnstileReady();'}));
   await page.goto(url);await page.waitForLoadState('networkidle');
   assert.equal(await page.locator('form [type=submit]:enabled').count(),2);assert.equal(await page.locator('.hero + .trust-strip').count(),1);assert.equal(calls.length,0);
+  const event=JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
+  assert.equal(event.startDate,'2026-12-12T08:00:00+05:30');
+  assert.equal(await page.locator('link[rel=canonical]').getAttribute('href'),'https://lp.techleadsit.com/scm-batch-80');
+  assert.ok((await page.locator('.batch').innerText()).includes('14 December 2026 · 7:00 AM IST'));
+  assert.ok(!(await page.locator('body').innerText()).match(/31 October|2 November|November 1st/));
+  const seconds=await page.locator('[data-countdown="seconds"]').innerText();
+  await page.waitForFunction(s=>document.querySelector('[data-countdown="seconds"]').textContent!==s,seconds,{timeout:2500});
+  await page.screenshot({path:path.join(root,'december-desktop-proof.png'),fullPage:true});
   enabled=true;await page.reload();
   async function fill(selector){const f=page.locator(selector);await f.locator('[name=name]').fill('Security Test');await f.locator('[name=email]').fill('security-test@example.invalid');await f.locator('[name=countryCode]').selectOption('+1');await f.locator('[name=mobile]').fill('2025550123');await f.locator('[name=careerObjective]').nth(1).check();return f;}
   const inline=await fill('#inline-demo-form');await inline.locator('[type=submit]').click();await inline.locator('[role=status]').filter({hasText:'confirm your registration'}).waitFor();assert.equal(await inline.locator('.zoom-link').count(),0);
   save=true;wrongId=true;await inline.locator('[type=submit]:enabled').waitFor();await inline.locator('[type=submit]').click();await inline.locator('[type=submit]:enabled').waitFor();assert.equal(await inline.locator('.zoom-link').count(),0);
   wrongId=false;nonJson=true;await inline.locator('[type=submit]').click();await inline.locator('[type=submit]:enabled').waitFor();assert.equal(await inline.locator('.zoom-link').count(),0);
-  nonJson=false;await inline.locator('[type=submit]').click();await inline.locator('.zoom-link').waitFor();assert.ok(calls.every(c=>c.registrationId===calls[0].registrationId));assert.equal(calls[3].source,'inline');assert.equal(calls[3].countryCode,'+1');
+  nonJson=false;await inline.locator('[type=submit]').click();await inline.locator('.zoom-link').waitFor();assert.ok(calls.every(c=>c.registrationId===calls[0].registrationId));assert.equal(calls[3].source,'inline');assert.equal(calls[3].countryCode,'+1');assert.ok((await inline.locator('[role=status]').innerText()).includes('12 December 2026'));
   await page.locator('[data-register]').first().click();const popup=await fill('#demo-form');await popup.locator('[type=submit]:enabled').waitFor();await popup.locator('[type=submit]').click();await popup.locator('.zoom-link').waitFor();assert.equal(calls[4].source,'popup');assert.equal(await popup.locator('.zoom-link').getAttribute('href'),'https://zoom.us/j/8125323232');
   await page.locator('#registration .close').click();await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-  console.log('PASS: enabled forms; URL-encoded n8n POST only; inline/popup success; failure, wrong ID and unreadable response never show Zoom; durable retry ID; mobile layout. Webhook mocked; live Sheet tests run separately.');
+  await page.locator('.poster img').scrollIntoViewIfNeeded();
+  await page.locator('.poster img').evaluate(img=>img.decode());
+  assert.ok(await page.locator('.poster img').evaluate(img=>img.naturalWidth===1080));
+  await page.screenshot({path:path.join(root,'december-mobile-proof.png'),fullPage:true});
+  console.log('PASS: December date, event schema, unchanged canonical URL and ticking countdown;  enabled forms; URL-encoded n8n POST only; inline/popup success; failure, wrong ID and unreadable response never show Zoom; durable retry ID; mobile layout. Webhook mocked; live Sheet tests run separately.');
 }finally{await browser.close();server.close();}})().catch(e=>{console.error(e);process.exitCode=1;server.close();});

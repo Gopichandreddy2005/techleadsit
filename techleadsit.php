@@ -195,9 +195,10 @@ function techleadsit_route_landing_pages() {
                 }
                 if ($slug === 'scm-batch-80' || $slug === 'oracle-fusion-hcm-online-live-demo') {
                     $asset_url = plugin_dir_url(__FILE__) . ($slug === 'scm-batch-80' ? 'oracle-fusion-scm-live-demo/' : 'oracle-fusion-hcm-live-demo/');
+                    $event_script = $slug === 'scm-batch-80' ? 'app.js?v=13' : 'app.js?v=12';
                     $html_content = str_replace(
-                        array('href="styles.css?v=7"', 'src="app.js?v=12"', 'src="assets/', 'href="assets/'),
-                        array('href="'.$asset_url.'styles.css?v=7"', 'src="'.$asset_url.'app.js?v=12"', 'src="'.$asset_url.'assets/', 'href="'.$asset_url.'assets/'),
+                        array('href="styles.css?v=7"', 'src="'.$event_script.'"', 'src="assets/', 'href="assets/'),
+                        array('href="'.$asset_url.'styles.css?v=7"', 'src="'.$asset_url.$event_script.'"', 'src="'.$asset_url.'assets/', 'href="'.$asset_url.'assets/'),
                         $html_content
                     );
                     nocache_headers();
