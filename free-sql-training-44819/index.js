@@ -54,10 +54,11 @@ function initConversationalForm() {
 
   // Step percentage mapping for progress indicator
   const progressPercentages = {
-    "1": 25,
-    "2": 50,
-    "3": 75,
-    "4": 95,
+    "1": 20,
+    "2": 40,
+    "3": 60,
+    "4": 80,
+    "5": 95,
     "success": 100
   };
 
@@ -77,7 +78,8 @@ function initConversationalForm() {
       case "1": return "2";
       case "2": return "3";
       case "3": return "4";
-      case "4": return null; // Trigger submit
+      case "4": return "5";
+      case "5": return null; // Trigger submit
       default: return null;
     }
   }
@@ -445,7 +447,7 @@ function initConversationalForm() {
         submittingState.style.display = "none";
         form.querySelectorAll("button").forEach(button => button.disabled = false);
         submissionError.hidden = false;
-        transitionToStep("4", "backward");
+        transitionToStep("5", "backward");
         submissionError.focus();
       }
     });
@@ -594,7 +596,7 @@ function initConversationalForm() {
 
   // 11. Real-time key/blur validators
   function initLiveValidation() {
-    const inputs = document.querySelectorAll(".step-card[data-step='1'] input");
+    const inputs = document.querySelectorAll('.step-card[data-type="input"] input');
     inputs.forEach(input => {
       input.addEventListener("input", function() {
         validateSingleInput(this, false);

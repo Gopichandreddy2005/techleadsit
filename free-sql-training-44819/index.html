@@ -49,17 +49,28 @@
 
     <form id="conversational-lead-form" novalidate>
       
-      <!-- STEP 1: Contact Details -->
+      <!-- STEP 1: Full Name -->
       <div class="step-card active" data-step="1" data-type="input" aria-live="polite">
-        <div class="step-badge">Step 01 → Basic Details</div>
-        <h1 class="step-question">Welcome! Let's get started with your <span class="text-indigo">contact information</span>.</h1>
-        <p class="step-description">Enter your name, WhatsApp number, and email address to secure your training spot.</p>
+        <div class="step-badge">Step 01 of 05 → Your Name</div>
+        <h1 class="step-question">Welcome! Let's get started with your <span class="text-indigo">name</span>.</h1>
+        <p class="step-description">Tell us your name to begin your free SQL training registration.</p>
         
         <div class="form-group">
           <label for="user-name" class="conversational-label">Full Name</label>
           <input type="text" id="user-name" name="name" class="conversational-input" placeholder="Type your full name here..." autocomplete="name" aria-describedby="name-error" aria-invalid="false" required autofocus>
           <div class="input-error-msg" role="alert" id="name-error">Please enter your name.</div>
         </div>
+
+        <div class="step-actions">
+          <button type="button" class="btn btn-primary btn-next">Continue <span class="kbd-hint">↵</span></button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Contact Details -->
+      <div class="step-card" data-step="2" data-type="input" aria-live="polite">
+        <div class="step-badge">Step 02 of 05 → Contact Details</div>
+        <h1 class="step-question">How can we <span class="text-indigo">reach you</span>, <span class="dynamic-name">there</span>?</h1>
+        <p class="step-description">Enter your WhatsApp number and email address for training updates.</p>
 
         <div class="form-group">
           <label for="user-phone" class="conversational-label">WhatsApp Number</label>
@@ -91,13 +102,14 @@
         </div>
 
         <div class="step-actions">
+          <button type="button" class="btn btn-outline btn-back">Back</button>
           <button type="button" class="btn btn-primary btn-next">Continue <span class="kbd-hint">↵</span></button>
         </div>
       </div>
 
-      <!-- STEP 2: Professional Status -->
-      <div class="step-card" data-step="2" data-type="select" aria-live="polite">
-        <div class="step-badge">Step 02 → Professional Status</div>
+      <!-- STEP 3: Professional Status -->
+      <div class="step-card" data-step="3" data-type="select" aria-live="polite">
+        <div class="step-badge">Step 03 of 05 → Professional Status</div>
         <h1 class="step-question">What describes your current <span class="text-indigo">professional status</span>, <span class="dynamic-name">there</span>?</h1>
         <p class="step-description">Select the option that matches you best. Click an option or press the letter key.</p>
         
@@ -128,9 +140,9 @@
         </div>
       </div>
 
-      <!-- STEP 3: SQL Knowledge Level -->
-      <div class="step-card" data-step="3" data-type="select" aria-live="polite">
-        <div class="step-badge">Step 03 → Experience Level</div>
+      <!-- STEP 4: SQL Knowledge Level -->
+      <div class="step-card" data-step="4" data-type="select" aria-live="polite">
+        <div class="step-badge">Step 04 of 05 → Experience Level</div>
         <h1 class="step-question">How would you rate your experience with <span class="text-indigo">SQL / Databases</span>?</h1>
         <p class="step-description">Don't worry! This training covers everything from Beginning to Advanced levels.</p>
         
@@ -157,9 +169,9 @@
         </div>
       </div>
 
-      <!-- STEP 4: Primary Goal -->
-      <div class="step-card" data-step="4" data-type="select" aria-live="polite">
-        <div class="step-badge">Step 04 → Learning Goal</div>
+      <!-- STEP 5: Primary Goal -->
+      <div class="step-card" data-step="5" data-type="select" aria-live="polite">
+        <div class="step-badge">Step 05 of 05 → Learning Goal</div>
         <h1 class="step-question">What is your primary goal for attending this <span class="text-indigo">SQL Training</span>?</h1>
         <p class="step-description">We will tailor the real-world project scenarios based on class goals.</p>
         
