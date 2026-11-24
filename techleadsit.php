@@ -91,8 +91,8 @@ function techleadsit_route_landing_pages() {
         $sitemap_entries = array(
             'https://lp.techleadsit.com/oracle-fusion-hcm-training/' => array('lastmod' => '2026-09-08', 'priority' => '1.0'),
             'https://lp.techleadsit.com/f-hcm-course/' => array('lastmod' => '2026-09-08', 'priority' => '0.9'),
-            'https://lp.techleadsit.com/cookie-policy/' => array('lastmod' => '2026-10-09', 'priority' => '0.6'),
-            'https://lp.techleadsit.com/privacy-policy/' => array('lastmod' => '2026-09-07', 'priority' => '0.6'),
+            'https://lp.techleadsit.com/cookie-policy/' => array('lastmod' => '2026-11-24', 'priority' => '0.6'),
+            'https://lp.techleadsit.com/privacy-policy/' => array('lastmod' => '2026-11-24', 'priority' => '0.6'),
             'https://lp.techleadsit.com/terms-and-conditions/' => array('lastmod' => '2026-09-07', 'priority' => '0.6'),
             'https://lp.techleadsit.com/refund-cancellation-policy/' => array('lastmod' => '2026-09-07', 'priority' => '0.6')
         );
@@ -195,12 +195,17 @@ function techleadsit_route_landing_pages() {
                 }
                 if ($slug === 'scm-batch-80' || $slug === 'oracle-fusion-hcm-online-live-demo') {
                     $asset_url = plugin_dir_url(__FILE__) . ($slug === 'scm-batch-80' ? 'oracle-fusion-scm-live-demo/' : 'oracle-fusion-hcm-live-demo/');
-                    $event_script = $slug === 'scm-batch-80' ? 'app.js?v=13' : 'app.js?v=12';
+                    $event_style = $slug === 'scm-batch-80' ? 'styles.css?v=22' : 'styles.css?v=7';
+                    $event_script = $slug === 'scm-batch-80' ? 'app.js?v=19' : 'app.js?v=12';
                     $html_content = str_replace(
-                        array('href="styles.css?v=7"', 'src="'.$event_script.'"', 'src="assets/', 'href="assets/'),
-                        array('href="'.$asset_url.'styles.css?v=7"', 'src="'.$asset_url.$event_script.'"', 'src="'.$asset_url.'assets/', 'href="'.$asset_url.'assets/'),
+                        array('href="'.$event_style.'"', 'src="'.$event_script.'"', 'src="assets/', 'href="assets/', 'poster="assets/'),
+                        array('href="'.$asset_url.$event_style.'"', 'src="'.$asset_url.$event_script.'"', 'src="'.$asset_url.'assets/', 'href="'.$asset_url.'assets/', 'poster="'.$asset_url.'assets/'),
                         $html_content
                     );
+                    if ($slug === 'scm-batch-80') {
+                        $bridge_endpoint = wp_json_encode(rest_url('tlit-leads/v1/scm-registration'), JSON_HEX_TAG);
+                        $html_content = str_replace('</head>', '<script>window.SCM_REGISTRATION_ENDPOINT='.$bridge_endpoint.';</script></head>', $html_content);
+                    }
                     nocache_headers();
                     status_header(200);
                     header('Content-Type: text/html; charset=utf-8');
@@ -236,7 +241,7 @@ function techleadsit_route_landing_pages() {
                 $html_content = str_replace('src="logo-dark.png"', 'src="' . $plugin_url . 'logo-dark.png"', $html_content);
                 $html_content = str_replace('src="logo-light.png"', 'src="' . $plugin_url . 'logo-light.png"', $html_content);
                 $html_content = str_replace('src="images/', 'src="' . $plugin_url . 'images/', $html_content);
-                $html_content = str_replace('href="policy.css"', 'href="' . $plugin_url . 'policy.css?v=1.0"', $html_content);
+                $html_content = str_replace('href="policy.css"', 'href="' . $plugin_url . 'policy.css?v=1.1"', $html_content);
                 $html_content = str_replace('src="../logo-dark.png"', 'src="' . plugin_dir_url(__FILE__) . 'f-hcm-course/logo-dark.png"', $html_content);
 
                 // Policy pages keep shared tracking but omit batch counters and countdowns.
