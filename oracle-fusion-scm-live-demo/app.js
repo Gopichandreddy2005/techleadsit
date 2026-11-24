@@ -1,11 +1,14 @@
 'use strict';
 const registrationEndpoint = window.SCM_REGISTRATION_ENDPOINT || '/wp-json/tlit-leads/v1/scm-registration';
+const demoDate = document.querySelector('time[data-scm-time="demo"]');
+const demoTime = Date.parse(demoDate.dateTime);
+const demoSchedule = demoDate.textContent.trim();
 
 const formCopy = {
   demo: {
     intent: 'demo',
     title: 'Register for the Free Demo',
-    description: 'Oracle Fusion SCM · 12 December · 8:00 AM IST',
+    description: 'Oracle Fusion SCM · ' + demoSchedule,
     submit: 'Register for the Free Demo'
   },
   brochure: {
@@ -22,7 +25,6 @@ const formCopy = {
   }
 };
 
-const demoTime = Date.parse('2026-12-12T08:00:00+05:30');
 function updateCountdown() {
   const remaining = Math.max(0, Math.floor((demoTime - Date.now()) / 1000));
   const parts = {
@@ -233,7 +235,7 @@ function attachLeadForm(container, source, closeButton) {
         statusMessage.textContent = 'Your brochure is ready. If the download doesn’t start, use the link below.';
         resultLink.click();
       } else {
-        statusMessage.textContent = 'Your free seat is reserved for 12 December 2026 at 8:00 AM IST. Use the link below to join on Zoom.';
+        statusMessage.textContent = 'Your free seat is reserved for ' + demoSchedule + '. Use the link below to join on Zoom.';
       }
       lastSubmission = undefined;
       requestId = undefined;

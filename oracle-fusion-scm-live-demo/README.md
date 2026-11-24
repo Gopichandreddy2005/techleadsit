@@ -1,5 +1,9 @@
 # SCM Batch 80 — fresher landing page
 
+## Updating the demo and batch dates
+
+In WordPress, open **Landing Page Settings → Oracle Fusion SCM → SCM live demo schedule**. Enter the free demo and regular batch start times in IST, then select **Save changes**. The dates apply to `/scm-batch-80` and supply its countdown, registration messages and event metadata.
+
 ## Three-step registration and brochure download
 
 The inline demo form and the demo, SCM brochure, and AI brochure popups submit to the same-origin WordPress REST route `tlit-leads/v1/scm-registration` after the final step. The route saves the lead and all seven qualification answers in Conversion Bridge under **Oracle Fusion SCM**, along with terms acceptance and the requested brochure where applicable. Demo confirmation and PDF downloads require a Conversion Bridge receipt matching the submitted registration ID and intent.

@@ -102,6 +102,7 @@ async function main() {
     const event = JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
     assert.equal(event.startDate, '2026-12-12T08:00:00+05:30');
     assert.equal(await page.locator('.event-list time').last().getAttribute('datetime'), '2026-12-14T07:00:00+05:30');
+    const demoSchedule = await page.locator('.hero-event time').textContent();
 
     const track = page.locator('.logo-track');
     assert.equal(await track.locator('ul').count(), 2);
@@ -182,12 +183,14 @@ async function main() {
     assert.equal(await heroForm.getByRole('link', { name: 'Terms and Conditions' }).getAttribute('href'), '/terms-and-conditions/');
     await heroForm.getByRole('button', { name: 'Register for the Free Demo' }).click();
     await hero.getByRole('link', { name: 'Join the Zoom Demo' }).waitFor();
+    assert.ok((await hero.getByRole('status').textContent()).includes(demoSchedule));
     assert.equal(calls.length, 1);
     assert.equal(calls[0].intent, 'demo');
     assert.equal(calls[0].source, 'inline');
     assert.equal(await hero.getByRole('link', { name: 'Download the PDF' }).isVisible(), false);
 
     await page.locator('.closing [data-lead-intent=demo]').click();
+    assert.ok((await dialog.locator('#form-description').textContent()).includes(demoSchedule));
     const form = page.locator('#demo-form');
     assert.equal(await form.locator('[name=name]').inputValue(), '');
     assert.equal(await form.getByRole('link', { name: 'Privacy Policy' }).getAttribute('href'), '/privacy-policy/');
