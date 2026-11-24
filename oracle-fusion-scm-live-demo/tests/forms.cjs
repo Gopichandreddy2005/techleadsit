@@ -91,7 +91,7 @@ async function main() {
     await page.goto(base);
     assert.equal(await page.locator('main > section').count(), 10);
     assert.equal(await page.locator('.awareness + .faq-section').count(), 1);
-    assert.equal(await page.locator('.hero').getByRole('link', { name: 'Call +91 81253 23232' }).getAttribute('href'), 'tel:+918125323232');
+    assert.equal(await page.locator('.hero').getByRole('link', { name: 'Contact Us', exact: true }).getAttribute('href'), 'tel:+918125323232');
     assert.equal(await page.locator('.hero a[href="#scm-curriculum"]').count(), 0);
     const footerLinks = page.getByRole('navigation', { name: 'Policies and contact' }).getByRole('link');
     assert.deepEqual(await footerLinks.evaluateAll(links => links.map(link => link.getAttribute('href'))), [
