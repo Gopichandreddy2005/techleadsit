@@ -157,7 +157,7 @@ async function main() {
     const dialog = page.getByRole('dialog');
     const hero = page.locator('#hero-register');
     const heroForm = hero.locator('form');
-    assert.equal(await heroForm.getByRole('link', { name: 'Privacy Policy' }).getAttribute('href'), '/privacy-policy/');
+    assert.equal(await heroForm.getByRole('link', { name: 'Privacy Policy' }).count(), 0);
     assert.equal(await page.locator('.hero-portrait').count(), 0);
     await heroForm.getByRole('button', { name: 'Continue' }).click();
     assert.equal(await heroForm.locator('[data-form-step="1"]').isVisible(), true);
@@ -176,6 +176,7 @@ async function main() {
     assert.equal(await heroForm.locator('[name=careerObjective]').inputValue(), 'first-erp-job');
     await heroForm.getByRole('button', { name: 'Continue' }).click();
     await completeEnrollment(heroForm);
+    assert.equal(await heroForm.getByRole('link', { name: 'Privacy Policy' }).getAttribute('href'), '/privacy-policy/');
     assert.equal(await heroForm.getByRole('link', { name: 'Privacy Policy' }).getAttribute('target'), '_blank');
     await heroForm.getByRole('button', { name: 'Register for the Free Demo' }).click();
     assert.equal(calls.length, 0);
@@ -193,7 +194,7 @@ async function main() {
     assert.ok((await dialog.locator('#form-description').textContent()).includes(demoSchedule));
     const form = page.locator('#demo-form');
     assert.equal(await form.locator('[name=name]').inputValue(), '');
-    assert.equal(await form.getByRole('link', { name: 'Privacy Policy' }).getAttribute('href'), '/privacy-policy/');
+    assert.equal(await form.getByRole('link', { name: 'Privacy Policy' }).count(), 0);
     await dialog.getByRole('button', { name: 'Close form' }).click();
 
     await page.locator('[data-lead-intent=brochure]').click();
